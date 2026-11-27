@@ -2,33 +2,44 @@
 
 Aplicación web mobile-first para practicar cuarteto en grupo, sin necesitar leer partituras.
 
-## Primera versión
+## Qué incluye
 
-- Crear fichas de canciones con artista, tono, letra/acordes y notas.
-- Seleccionar una pista de audio local y reproducirla durante la sesión.
-- Pausar, avanzar y retroceder desde los controles del navegador.
-- Imprimir letras.
-- Guía visual de acordes abiertos de guitarra (SOL, RE, MIm y DO).\n- Metrónomo ajustable y detección aproximada de tempo con palmas.\n- Transpositor de nombres de acordes en letras (no modifica el audio).\n- Taller práctico con rutinas para voz, teclado y guitarra, método para sacar temas de oído, vocabulario común y plan de ensayo de 60 minutos.
-- Organizar repertorio para shows.
-- Registrar prácticas.
-- Exportar e importar una copia JSON de los datos.
+- Fichas de canciones con artista, tono, letra, acordes y notas de ensayo.
+- Reproductor para pistas elegidas desde el propio celular o computadora.
+- Controles para pausar, avanzar y retroceder; repetición de pista.
+- Impresión de letras.
+- Guía visual de acordes abiertos de guitarra: SOL, RE, MIm y DO.
+- Metrónomo ajustable y estimación de tempo marcando palmas.
+- Transpositor de nombres de acordes en letras. Cambia el texto, no el audio.
+- Taller práctico para voz, teclado y guitarra.
+- Método para sacar canciones de oído, vocabulario común y plan de ensayo de 60 minutos.
+- Organización de repertorio para shows y registro de prácticas.
+- Exportación e importación de copias JSON.
+- Manifiesto de aplicación y service worker con caché básica para uso offline después de la primera carga.
 
 ## Publicar con GitHub Pages
 
 1. Abrir **Settings** del repositorio.
 2. Entrar en **Pages**.
 3. En **Build and deployment**, elegir **Deploy from a branch**.
-4. Seleccionar la rama principal (normalmente `main`) y la carpeta `/ (root)`.
-5. Guardar. GitHub mostrará la dirección pública cuando termine la publicación.
+4. Seleccionar la rama `main` y la carpeta `/ (root)`.
+5. Guardar y esperar a que GitHub publique el sitio.
 
-## Aplicación instalable\n\nLa aplicación incluye manifiesto y service worker para instalación y caché básica offline. Estas funciones requieren publicar por HTTPS (GitHub Pages sirve HTTPS). Después de publicar, abrí la página desde Chrome en el celular y usá el menú del navegador para instalar o agregar a pantalla de inicio. La primera visita necesita conexión para guardar los archivos básicos.\n\n## Importante
+Dirección prevista: https://eliasmartinezcultural-glitch.github.io/proyecto-musical/
 
-- Los datos se guardan en el almacenamiento local del navegador/dispositivo. No se sincronizan automáticamente entre teléfonos.
-- Las pistas de audio se seleccionan desde el dispositivo y no se suben al repositorio.
-- Exporten copias de seguridad periódicamente.
-- El cambio de tonalidad real (pitch shifting sin alterar la velocidad), la sincronización entre músicos, el cambio de tono real del audio, la sincronización entre músicos, modo offline y funciones avanzadas de ensayo están planificados para etapas siguientes. Esta versión no simula esas funciones ni presenta controles falsos.
-- Para usar en teléfonos, abrir el enlace de GitHub Pages desde el navegador. La instalación como aplicación y el modo offline se incorporarán después de probar la primera versión.
+## Instalar en el celular
+
+Una vez publicado por HTTPS, abrir el enlace desde Chrome en Android y elegir **Instalar aplicación** o **Agregar a pantalla de inicio** desde el menú del navegador. La primera visita requiere conexión para guardar los archivos básicos.
+
+## Importante
+
+- Las canciones, notas y prácticas se guardan en el almacenamiento local del navegador y dispositivo.
+- Los datos no se sincronizan automáticamente entre teléfonos. Para compartirlos, exportar una copia JSON e importarla en el otro dispositivo.
+- Las pistas de audio se seleccionan localmente y no se suben al repositorio ni se incluyen en las copias JSON. Cada músico debe elegir el archivo de audio en su propio dispositivo.
+- El transpositor cambia los nombres de acordes escritos; no cambia la tonalidad del audio.
+- El cambio real de tono del audio (pitch shifting sin alterar la velocidad) y la sincronización simultánea entre músicos quedan para una etapa posterior.
+- Descargá una copia de seguridad después de cada ensayo importante.
 
 ## Principios del proyecto
 
-Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes, navegación simple y herramientas útiles para músicos populares que están aprendiendo juntos.
+Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes y navegación simple para músicos populares que están aprendiendo juntos.
