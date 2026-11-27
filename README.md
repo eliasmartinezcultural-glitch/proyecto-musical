@@ -15,7 +15,7 @@ Sala web mobile-first para ensayar canciones populares de oído, sin partituras 
 
 La API oficial de YouTube no entrega el audio del reproductor a la página para procesarlo. Por eso esta versión **todavía no transpone el sonido del video**: el control de semitonos adapta los acordes escritos, no el audio. La velocidad de YouTube tampoco garantiza todos los valores para todos los videos.
 
-Para conseguir un Transpose real dentro de la misma Sala hace falta una extensión de Chrome propia que capture el audio de la pestaña y aplique procesamiento DSP (pitch shifting independiente del tempo). Esa extensión no está incluida ni debe darse por terminada hasta implementarla y probarla. No se usa extracción de audio, descarga de canciones ni servicios externos que re-alojen música.
+Se agregó una extensión experimental propia de Chrome en la carpeta [chrome-extension](./chrome-extension/). Captura el audio de la pestaña activa con `chrome.tabCapture`, lo procesa mediante AudioWorklet y recibe los semitonos desde el control de esta misma Sala. Para activarla hay que instalar la carpeta como extensión descomprimida y hacer clic una vez en su icono con la pestaña de la Sala activa. Después, los controles permanecen dentro de `tono.html`. El procesador granular es un prototipo: puede generar artefactos y todavía requiere pruebas reales de audio y compatibilidad antes de considerarse terminado. No descarga ni re-almacena canciones.
 
 ## Repertorio
 
@@ -34,7 +34,7 @@ En el repositorio, abrir **Settings → Pages**, seleccionar **Deploy from a bra
 
 URL prevista: https://eliasmartinezcultural-glitch.github.io/proyecto-musical/
 
-Después de publicar, probar en Chrome de escritorio y Android: reproducción embebida, enlaces que permiten inserción, velocidad disponible, repetición A–B y guardado local. GitHub Pages puede tardar unos minutos en actualizarse y el service worker puede conservar una versión anterior; recargar la página o borrar los datos del sitio si no aparecen los cambios.
+Después de publicar, probar en Chrome de escritorio: reproducción embebida, enlaces que permiten inserción, velocidad disponible, repetición A–B y guardado local. La extensión de audio es solo para Chrome de escritorio; no se instala en Android ni en iPhone. GitHub Pages puede tardar unos minutos en actualizarse y el service worker puede conservar una versión anterior; recargar la página o borrar los datos del sitio si no aparecen los cambios.
 
 ## Principios
 
