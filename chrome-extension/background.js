@@ -41,6 +41,8 @@ async function stopCapture(tabId, message = 'Transposición detenida.') {
 chrome.action.onClicked.addListener(async tab => {
   if (!tab?.id) return;
   try {
+    const savedPreferences = await chrome.storage.local.get('qualityPreset');
+    qualityPreset = savedPreferences.qualityPreset === 'cheaper' ? 'cheaper' : 'default';
     const captured = await chrome.tabCapture.getCapturedTabs();
     const already = captured.find(item => item.tabId === tab.id && item.status === 'active');
     if (already) {
@@ -79,6 +81,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'SALA_QUALITY') {
     qualityPreset = message.qualityPreset === 'cheaper' ? 'cheaper' : 'default';
+    chrome.storage.local.set({ qualityPreset }).catch(() => {});
     sendResponse({ ok: true, qualityPreset, appliesOnNextStart: true });
     return;
   }
