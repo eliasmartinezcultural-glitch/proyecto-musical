@@ -25,6 +25,8 @@ chrome.action.onClicked.addListener(async tab=>{
 });
 chrome.runtime.onMessage.addListener((msg,sender,sendResponse)=>{
  if(msg?.target==="offscreen")return;
+ if(msg?.target==="background"&&msg.type==="ENGINE_READY"){notifyTab(activeTabId,true,"Motor de audio listo. Ajustá los semitonos desde la Sala.");return;}
+ if(msg?.target==="background"&&msg.type==="ENGINE_ERROR"){notifyTab(activeTabId,false,"No se pudo iniciar el motor: "+(msg.message||"error de audio"));return;}
  if(msg?.type==="SALA_PITCH"){
   chrome.runtime.sendMessage({target:"offscreen",type:"SET_PITCH",semitones:Number(msg.semitones)||0});
   sendResponse({ok:true});
