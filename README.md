@@ -8,7 +8,7 @@ Aplicación web mobile-first para practicar cuarteto en grupo, sin necesitar lee
 - Seleccionar una pista de audio local y reproducirla durante la sesión.
 - Pausar, avanzar y retroceder desde los controles del navegador.
 - Imprimir letras.
-- Guía inicial de acordes y espacio de notas para voz, teclado y guitarra.
+- Guía visual de acordes abiertos de guitarra (SOL, RE, MIm y DO).\n- Metrónomo ajustable y detección aproximada de tempo con palmas.\n- Transpositor de nombres de acordes en letras (no modifica el audio).\n- Taller práctico con rutinas para voz, teclado y guitarra, método para sacar temas de oído, vocabulario común y plan de ensayo de 60 minutos.
 - Organizar repertorio para shows.
 - Registrar prácticas.
 - Exportar e importar una copia JSON de los datos.
@@ -26,7 +26,7 @@ Aplicación web mobile-first para practicar cuarteto en grupo, sin necesitar lee
 - Los datos se guardan en el almacenamiento local del navegador/dispositivo. No se sincronizan automáticamente entre teléfonos.
 - Las pistas de audio se seleccionan desde el dispositivo y no se suben al repositorio.
 - Exporten copias de seguridad periódicamente.
-- El cambio de tonalidad real (pitch shifting sin alterar la velocidad), la sincronización entre músicos, los diagramas verificados de acordes, el modo offline y las funciones avanzadas de ensayo están planificados para etapas siguientes. Esta versión no simula esas funciones ni presenta controles falsos.
+- El cambio de tonalidad real (pitch shifting sin alterar la velocidad), la sincronización entre músicos, el cambio de tono real del audio, la sincronización entre músicos, modo offline y funciones avanzadas de ensayo están planificados para etapas siguientes. Esta versión no simula esas funciones ni presenta controles falsos.
 - Para usar en teléfonos, abrir el enlace de GitHub Pages desde el navegador. La instalación como aplicación y el modo offline se incorporarán después de probar la primera versión.
 
 ## Principios del proyecto
