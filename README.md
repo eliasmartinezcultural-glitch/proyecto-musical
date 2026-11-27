@@ -107,3 +107,8 @@ El reproductor es un primer motor online funcional a nivel de interfaz y control
 ## Sala de tono en tiempo real
 
 Se agregó `tono.html`, una pantalla de cuatro funciones: reproducción de audio directo, cambio real de tono en semitonos en tiempo real, velocidad independiente y letra/acordes con transposición visual. Utiliza SoundTouchJS AudioWorklet (MPL-2.0). No sube audio: el usuario pega una URL directa. La fuente debe permitir reproducción desde el navegador y CORS; enlaces de YouTube/Spotify/páginas web no son fuentes de audio directo procesables. La pantalla guarda la URL y las notas localmente. El funcionamiento debe probarse con una fuente de audio CORS habilitada en Chrome/Android y Safari.
+
+
+### Auditoría del motor de tono
+
+La sala usa SoundTouchNode de @soundtouchjs/audio-worklet 2.1.1: pitchSemitones para transposición real y playbackRate sincronizado con la velocidad del elemento de audio para conservar la independencia tonal. La API oficial documenta estos parámetros y la arquitectura AudioWorklet. La salida de un MediaElementAudioSourceNode puede quedar en silencio si el audio remoto no habilita CORS; la interfaz informa este caso cuando detecta bloques procesados sin señal. GitHub Pages aún requiere prueba real en navegador con una URL de audio que habilite CORS.
