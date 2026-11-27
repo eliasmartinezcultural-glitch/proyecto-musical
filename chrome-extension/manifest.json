@@ -1,9 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Ocarina · Transpositor de Sala",
-  "version": "0.1.0",
-  "description": "Cambia el tono del audio de la pestaña donde está abierta la Sala de Ensayo.",
+  "version": "0.2.0",
+  "minimum_chrome_version": "116",
+  "description": "Transpone el audio de YouTube que suena dentro de la Sala de Ensayo.",
   "permissions": [
+    "activeTab",
     "tabCapture",
     "offscreen"
   ],
@@ -14,7 +16,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Activar transposición de audio en Sala"
+    "default_title": "Activar o detener el transpositor Ocarina"
   },
   "content_scripts": [
     {
