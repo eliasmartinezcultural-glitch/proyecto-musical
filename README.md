@@ -1,70 +1,63 @@
 # Elías Martínez · Cuarteto — Sala de ensayo
 
-Sala web mobile-first para ensayar cuarteto de oído, sin partituras. Mantiene tres espacios principales: **escuchar**, **cambiar el tono** y **letra/acordes**.
+Sala web mobile-first para ensayar cuarteto de oído, sin partituras. Mantiene tres espacios: **escuchar**, **cambiar el tono** y **letra/acordes**.
 
-## Funciones integradas
+## Funciones
 
-### 1. Escuchar
-- Catálogo dinámico de 31 canciones cargado desde `repertorio-30.json`, con buscador por artista o título.
-- Reproductor oficial de YouTube incrustado en la misma página.
-- Enlaces de video por canción guardados localmente; el grupo puede reemplazar la referencia por su versión preferida.
-- Reproducir/pausar, anterior/siguiente, saltos de 10 segundos, barra de posición, volumen y velocidades que YouTube admita para cada video.
-- Marcadores A–B para repetir un fragmento.
-- Ficha con tono, BPM, estado de verificación y sugerencias separadas para voz, teclado y guitarra.
+### Escuchar
+- Catálogo dinámico de 31 canciones.
+- Reproductor de YouTube incrustado dentro de la Sala.
+- Enlaces de video guardados localmente por canción.
+- Reproducir/pausar, anterior/siguiente, saltos de 10 segundos, posición, volumen y velocidades que YouTube admita.
+- Marcadores A–B para repetir fragmentos.
 
-### 2. Cambiar el tono
-- Rango de -12 a +12 semitonos, botones de ajuste rápido y referencia de tonalidad.
-- Motor real-time **Signalsmith Stretch** (WASM + AudioWorklet) incorporado localmente en la extensión Chrome.
-- Captura el audio de la pestaña activa y lo procesa localmente; el reproductor de YouTube sigue dentro de la Sala.
-- El tono y la velocidad son controles separados: cambiar semitonos no cambia el tempo.
-- Opción experimental de compensación de formantes para cuidar el timbre de la voz; puede alterar algunos instrumentos en una mezcla completa.
-- La extensión informa el estado del motor y la latencia estimada.
+### Cambiar el tono
+- Rango de -12 a +12 semitonos.
+- Motor **Signalsmith Stretch** (WASM + AudioWorklet) incorporado localmente en la extensión Chrome.
+- Captura del audio de la pestaña activa, procesamiento local y salida por el dispositivo de audio.
+- El tono y el tempo son controles independientes.
+- Compensación de latencia cacheada para cambios sucesivos.
+- Dos modos: calidad estándar y ahorro de CPU.
+- Compensación de formantes opcional, desactivada por defecto porque afecta la mezcla completa, no solo la voz.
+- La extensión se limita a capturar la pestaña de la Sala y limpia el motor cuando termina la pista capturada.
 
-### 3. Letra y acordes
-- Editor de letra y acordes por canción. Se pueden escribir acordes entre corchetes, por ejemplo `[C]`, `[G]`, `[Am]`.
-- Inserción rápida de etiquetas de intro, estrofa, estribillo, puente y final.
+### Letra y acordes
+- Letra y acordes por canción; acordes entre corchetes, por ejemplo `[C]`, `[G]`, `[Am]`.
+- Etiquetas rápidas para intro, estrofa, estribillo, puente y final.
 - Vista previa de acordes transpuestos.
-- Notas separadas para voz, teclado, guitarra y estructura.
-- Guardado automático local y botón de guardado explícito.
-- Exportación e importación de respaldo JSON para pasar las fichas a otro dispositivo.
+- Notas para voz, teclado, guitarra y estructura.
+- Guardado local y respaldo JSON.
 
-## Instalación del motor de audio
+## Instalar el motor
 
-La página web sola no puede acceder al audio interno del iframe de YouTube. Por eso el cambio de tono del sonido se realiza mediante la extensión de Chrome:
-
-1. Descargar el repositorio como ZIP desde GitHub y descomprimirlo.
+1. Descargar el repositorio como ZIP y descomprimirlo.
 2. Abrir `chrome://extensions`, activar Modo de desarrollador y elegir Cargar descomprimida.
 3. Seleccionar la carpeta `chrome-extension`.
 4. Abrir la Sala publicada, reproducir una canción y hacer clic en el icono de Ocarina.
-5. Esperar el mensaje **Signalsmith listo** y cambiar semitonos desde la Sala.
+5. Esperar **Signalsmith listo** y cambiar semitonos desde la Sala.
 
 Guía completa: [chrome-extension/README.md](./chrome-extension/README.md).
 
-## Motor y créditos
+## Motor y licencias
 
-Se incorpora la distribución Web Audio de [Signalsmith Stretch](https://github.com/Signalsmith-Audio/signalsmith-stretch), con WASM y AudioWorklet, desde su distribución oficial. La licencia MIT está incluida en `chrome-extension/vendor/LICENSE-SignalsmithStretch.txt`. No se usa CDN para el motor DSP y no se envía audio a servidores.
+Se incorpora [Signalsmith Stretch Web Audio](https://github.com/Signalsmith-Audio/signalsmith-stretch), con WASM y AudioWorklet, bajo licencia MIT. La licencia está incluida en `chrome-extension/vendor/LICENSE-SignalsmithStretch.txt`.
 
-## Límites y transparencia
+Se investigaron alternativas como Rubber Band WASM y SoundTouchJS. Rubber Band WASM se distribuye bajo GPL, con implicancias de licencia para redistribución; no se incorpora en esta versión. Signalsmith se mantiene como motor principal por su distribución Web Audio oficial, API para audio en vivo y licencia MIT.
 
-- La extensión requiere Chrome de escritorio 116 o posterior y activación explícita desde su icono.
-- No funciona como extensión en Android o iPhone.
-- La compensación de formantes es experimental en una mezcla polifónica; puede cambiar el timbre de instrumentos.
-- La entrada se normaliza a dos canales para capturas mono o estéreo.
-- La latencia depende del equipo y del navegador.
-- La integración de código y los controles tienen pruebas automatizadas. La calidad sonora y la carga efectiva de WASM/AudioWorklet deben validarse escuchando en Chrome real; no se presentan como certificadas.
-- Algunos videos no permiten reproducción insertada; algunas velocidades no están disponibles en todos los videos.
-- No se descargan, extraen, alojan ni re-almacenan canciones.
+## Límites
 
-## Repertorio y verificación
+- La extensión requiere Chrome de escritorio 116+ y activación explícita desde su icono.
+- No funciona como extensión en Android/iPhone.
+- La compensación de formantes puede alterar instrumentos en una mezcla polifónica; está apagada por defecto.
+- El modo ahorro de CPU usa el preset oficial `cheaper`; no garantiza menor latencia.
+- La calidad de audio, latencia percibida y estabilidad deben validarse en el equipo real.
+- YouTube puede impedir reproducción insertada de algunos videos.
+- No se descargan ni alojan pistas.
+- Letras, notas, tono y fuentes se guardan localmente. No hay sincronización en vivo entre músicos; el respaldo JSON es manual.
 
-El catálogo está en [repertorio-30.json](./repertorio-30.json). Los enlaces precargados son referencias de trabajo: comprobar que artista, versión y fragmento coincidan antes de ensayar. Para **Omega — “Bum, bum, bum”**, que queda seleccionada al abrir la Sala, todavía falta conectar una versión de YouTube que la banda confirme. No se inventa una pista ni una tonalidad.
+## Repertorio
 
-## Datos y privacidad
-
-- Letras, notas, tono elegido, compensación de formantes y enlaces se guardan en el almacenamiento local del navegador.
-- No hay cuentas ni sincronización automática en vivo entre los tres músicos.
-- El respaldo JSON permite mover las fichas manualmente; no incluye el audio.
-- El audio se transmite desde YouTube y se procesa en el navegador.
+El catálogo está en [repertorio-30.json](./repertorio-30.json). Las referencias precargadas deben cotejarse con las versiones elegidas por la banda. Para **Omega — “Bum, bum, bum”**, todavía falta conectar una versión de YouTube que ustedes confirmen.
 
 ## Publicación
 
@@ -72,8 +65,8 @@ En GitHub: **Settings → Pages → Deploy from a branch → main → /(root)**.
 
 URL prevista: https://eliasmartinezcultural-glitch.github.io/proyecto-musical/
 
-Después de publicar, probar en Chrome de escritorio: reproducción insertada, selección de canciones, repetición A–B, velocidades, guardado y restauración de fichas, instalación de la extensión y calidad del audio transpuesto. El service worker utiliza caché `sala-ensayo-v9`.
+Después de publicar, comprobar en Chrome: reproducción, A–B, velocidad, cambio de tono, cambio de preset, formantes, detención, restauración de fichas y calidad sonora.
 
 ## Criterio de diseño
 
-Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes, navegación móvil y trabajo compartido de voz, teclado y guitarra sin exigir lectura musical.
+Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes, navegación móvil y trabajo conjunto de voz, teclado y guitarra sin exigir lectura musical.
