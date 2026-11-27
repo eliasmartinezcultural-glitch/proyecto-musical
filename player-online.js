@@ -4,8 +4,13 @@ const ytDefaultSources={
 3:{id:"hSKldnxWmds",start:0,label:"Video oficial de Omega"},
 4:{id:"JcWl4PcGGYc",start:0,label:"Referencia publicada por Canal 13 San Juan"},
 5:{id:"oNYCq9MuJME",start:0,label:"Video oficial de Omega ft. Monada"},
+8:{id:"A4GVya1Gyf0",start:0,label:"Referencia de Chordify · Kilómetros"},
 9:{id:"_1dHFBsq6ic",start:0,label:"Presentación en vivo · Un Poco de Ruido"},
-10:{id:"_1dHFBsq6ic",start:886,label:"Presentación en vivo · Un Poco de Ruido"}
+10:{id:"_1dHFBsq6ic",start:886,label:"Presentación en vivo · Un Poco de Ruido"},
+26:{id:"_1dHFBsq6ic",start:412,label:"Presentación en vivo · Un Poco de Ruido"},
+28:{id:"_1dHFBsq6ic",start:649,label:"Presentación en vivo · Un Poco de Ruido"},
+29:{id:"_1dHFBsq6ic",start:752,label:"Presentación en vivo · Un Poco de Ruido"},
+30:{id:"_1dHFBsq6ic",start:1002,label:"Presentación en vivo · Un Poco de Ruido"}
 };
 let ytUserSources={};try{ytUserSources=JSON.parse(localStorage.getItem("em_online_sources")||"{}")}catch(e){}
 let ytPlayer=null,ytApiReady=false,ytSelectedId=null,ytLoopA=null,ytLoopB=null,ytLoopOn=false,ytLoopTimer=null,ytTickTimer=null,ytPendingAutoplay=false;
