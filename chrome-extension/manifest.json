@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Ocarina · Transpositor de Sala",
+  "version": "0.1.0",
+  "description": "Cambia el tono del audio de la pestaña donde está abierta la Sala de Ensayo.",
+  "permissions": [
+    "tabCapture",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "https://eliasmartinezcultural-glitch.github.io/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Activar transposición de audio en Sala"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://eliasmartinezcultural-glitch.github.io/proyecto-musical/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
