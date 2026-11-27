@@ -21,7 +21,7 @@ window.addEventListener('message', event => {
         source: 'ocarina-transpose',
         type: 'STATUS',
         active: !!result?.active,
-        message: result?.active ? 'Captura activa. Comprobando el motor de audio…' : 'Motor detenido o sin capturar.'
+        message: result?.message || (result?.active ? 'Motor de audio listo.' : 'Motor detenido o sin capturar.')
       }, location.origin);
     });
   }
