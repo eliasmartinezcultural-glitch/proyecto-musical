@@ -1,5 +1,6 @@
 /* Sala de ensayo · reproductor online */
 const ytDefaultSources={
+1:{id:"GeKJUSyJeXM",start:0,label:"Pepo Lara · canal Topic"},
 3:{id:"hSKldnxWmds",start:0,label:"Video oficial de Omega"},
 4:{id:"JcWl4PcGGYc",start:0,label:"Referencia publicada por Canal 13 San Juan"},
 5:{id:"oNYCq9MuJME",start:0,label:"Video oficial de Omega ft. Monada"},
@@ -40,6 +41,7 @@ function ytSelectSong(id,autoplay=true){
  document.getElementById("ytUrlInput").value="https://www.youtube.com/watch?v="+src.id;document.getElementById("ytStartInput").value=src.start||0;ytEnsurePlayer(src,autoplay);
 }
 function ytTogglePlay(){if(!ytPlayer||!ytApiReady){ytSetStatus("Elegí una canción y esperá que cargue el reproductor.");return}const state=ytPlayer.getPlayerState();if(state===1)ytPlayer.pauseVideo();else ytPlayer.playVideo()}
+function ytNextSong(direction){const available=catalogSongs.filter(s=>ytSource(s.id));if(!available.length)return;let i=available.findIndex(s=>s.id===Number(ytSelectedId));i=(i+direction+available.length)%available.length;ytSelectSong(available[i].id,true)}
 function ytSeekBy(n){if(ytPlayer?.getCurrentTime)ytPlayer.seekTo(Math.max(0,ytPlayer.getCurrentTime()+n),true)}
 function ytPreviewSeek(v){const d=ytPlayer?.getDuration?.()||0;document.getElementById("ytCurrent").textContent=ytFormat(d*(Number(v)/1000))}
 function ytCommitSeek(v){if(ytPlayer?.getDuration)ytPlayer.seekTo(ytPlayer.getDuration()*(Number(v)/1000),true)}
