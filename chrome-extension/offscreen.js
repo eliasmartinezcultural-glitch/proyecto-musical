@@ -124,6 +124,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ ready: true });
     return;
   }
+  if (message.type === 'GET_STATUS') {
+    sendResponse({
+      active: Boolean(engine && context && context.state === 'running'),
+      latencyMs: Math.round(engineLatency * 1000),
+      qualityPreset
+    });
+    return;
+  }
   if (message.type === 'START_CAPTURE') start(message.streamId, message.qualityPreset);
   if (message.type === 'SET_PITCH') updatePitch(message.semitones, message.preserveFormants);
   if (message.type === 'STOP_CAPTURE') stop();
