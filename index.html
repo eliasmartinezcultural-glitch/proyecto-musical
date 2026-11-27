@@ -95,7 +95,9 @@ function renderHome(){homeSongs.innerHTML=db.songs.length?db.songs.slice(0,3).ma
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function seek(n){if(audio.src)audio.currentTime=Math.max(0,audio.currentTime+n)}
 function toggleLoop(){audio.loop=!audio.loop;loopLabel.textContent=audio.loop?'Sí':'No'}
-function printLyrics(){let t=sTitle.value||'Canción';let w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write('<html><head><title>'+esc(t)+'</title><style>body{font:18px Arial;padding:35px;white-space:pre-wrap}h1{font-size:25px}pre{white-space:pre-wrap;font:18px/1.8 Arial}</style></head><body><h1>'+esc(t)+'</h1><pre>'+esc(sLyrics.value)+'</pre></body></html>');w.document.close();w.print()}
+function printLyrics(){let t=sTitle.value||'Canción';let w=window.open('','_blank');if(!w){alert('Permití ventanas emergentes para imprimir.');return}w.document.write('<html><head><title>'+esc(t)+'</title><style>body{font:18px Arial;padding:35px;white-space:pre-wrap}h1{font-size:25px}pre{white-space:pre-wrap;font:18px/1.8 Arial}</style></head><body><h1>'+esc(t)+'</h1><pre>'+esc(sLyrics.value)+'</pre><script src="./player-online.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body></html>');w.document.close();w.print()}
 function saveBand(){db.bandNotes=bandNotes.value;persist();alert('Acuerdos guardados.')}
 function saveShow(){db.show={name:showName.value,list:showList.value,talk:showTalk.value};persist();alert('Repertorio guardado.')}
 function savePractice(){if(!practiceTask.value.trim()){alert('Escribí qué practicaste.');return}db.practice.unshift({task:practiceTask.value,minutes:practiceMinutes.value,mood:practiceMood.value,date:new Date().toLocaleDateString('es-AR')});practiceTask.value='';practiceMinutes.value='';persist();renderPractice()}
