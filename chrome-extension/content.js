@@ -1,6 +1,12 @@
 window.addEventListener('message', event => {
   if (event.source !== window || event.origin !== location.origin || !event.data || event.data.source !== 'ocarina-sala') return;
   const data = event.data;
+  if (data.type === 'SET_QUALITY') {
+    chrome.runtime.sendMessage({
+      type: 'SALA_QUALITY',
+      qualityPreset: data.qualityPreset === 'cheaper' ? 'cheaper' : 'default'
+    }).catch(() => {});
+  }
   if (data.type === 'SET_PITCH') {
     chrome.runtime.sendMessage({
       type: 'SALA_PITCH',
