@@ -102,3 +102,8 @@ Para otras canciones, el botón Conectar permite buscar la versión en YouTube y
 - Los enlaces y preferencias agregados por el usuario se guardan en el almacenamiento local del navegador de ese dispositivo. No se sincronizan automáticamente entre los celulares de los tres músicos.
 
 El reproductor es un primer motor online funcional a nivel de interfaz y control API; antes de declararlo probado en producción, hay que verificarlo en la URL publicada, en Chrome Android y en Safari/iPhone, y comprobar los permisos de reproducción de cada video.
+
+
+## Sala de tono en tiempo real
+
+Se agregó `tono.html`, una pantalla de cuatro funciones: reproducción de audio directo, cambio real de tono en semitonos en tiempo real, velocidad independiente y letra/acordes con transposición visual. Utiliza SoundTouchJS AudioWorklet (MPL-2.0). No sube audio: el usuario pega una URL directa. La fuente debe permitir reproducción desde el navegador y CORS; enlaces de YouTube/Spotify/páginas web no son fuentes de audio directo procesables. La pantalla guarda la URL y las notas localmente. El funcionamiento debe probarse con una fuente de audio CORS habilitada en Chrome/Android y Safari.
