@@ -1,24 +1,34 @@
-# Ocarina · Transpositor de Sala (prototipo)
+# Ocarina · Transpositor de Sala (prototipo experimental)
 
-Extensión experimental de Chrome para procesar el audio de la pestaña donde está abierta la Sala de Ensayo. La idea es que el video de YouTube siga dentro de `tono.html` y los controles de tono permanezcan en esa misma pantalla.
+Esta extensión complementa la página de Sala de Ensayo. El video de YouTube permanece incrustado en la Sala y el usuario controla los semitonos desde el panel **Cambiar el tono**.
 
-## Instalación de prueba
+## Instalar en Chrome de escritorio
 
-1. Descargar el repositorio como ZIP y descomprimirlo.
-2. Abrir `chrome://extensions` en Chrome.
+1. Descargar el repositorio completo como ZIP desde GitHub y descomprimirlo.
+2. Abrir `chrome://extensions`.
 3. Activar **Modo de desarrollador**.
 4. Elegir **Cargar descomprimida** y seleccionar la carpeta `chrome-extension`.
-5. Abrir la Sala publicada en GitHub Pages y reproducir un video.
-6. Con la pestaña de la Sala activa, hacer clic una vez en el icono de la extensión. Ese gesto autoriza a Chrome a capturar el audio de esa pestaña.
-7. Desde ese momento, el control de semitonos de la Sala envía el valor al motor de audio de la extensión. No hace falta abrir YouTube en otra pestaña.
+5. Abrir la Sala publicada con HTTPS y reproducir una canción.
+6. Hacer clic en el icono de Ocarina en la barra de extensiones.
+7. Volver a los controles de tono de la Sala. El control de semitonos envía el valor al motor de audio.
 
-## Qué hace y qué falta probar
+Para detenerlo, volver a pulsar el icono de la extensión o usar **Detener motor** dentro de la Sala.
 
-- Usa `chrome.tabCapture` para capturar el sonido de la pestaña activa, no para descargarlo.
-- Usa un documento offscreen y AudioWorklet para procesar y devolver el sonido a la salida del dispositivo.
-- El procesador incluido es un prototipo granular de cambio de tono. Puede producir artefactos; no debe considerarse calidad de estudio.
-- El proyecto debe probarse en Chrome real con videos embebidos, altavoces y auriculares, cambios de tono durante reproducción, pausa y cambio de canción.
-- La extensión no lee ni extrae el archivo fuente de YouTube. Solo procesa el audio que Chrome reproduce en la pestaña activa.
-- El audio original puede dejar de sonar directamente mientras la captura está activa; el offscreen lo devuelve procesado.
+## Arquitectura
 
-**Estado:** código inicial de prototipo, todavía no validado en una instalación real. No presentar como función terminada hasta completar las pruebas.
+- Manifest V3, Chrome 116 o posterior.
+- `chrome.tabCapture` obtiene el audio de la pestaña activa tras el gesto del usuario.
+- `chrome.offscreen` aloja un documento de audio sin abrir otra ventana.
+- AudioWorklet procesa el flujo en tiempo real.
+- La página y la extensión intercambian estado y semitonos mediante mensajes.
+
+## Límites conocidos
+
+- El procesador es un prototipo granular básico; no tiene calidad de estudio y puede generar artefactos.
+- No se ha probado todavía en una sesión real de Chrome. Debe validarse con distintos videos, auriculares, altavoces, pausas y cambios de canción.
+- El audio de la pestaña deja de salir directamente mientras se captura; el motor lo vuelve a emitir procesado.
+- No descarga, graba, extrae ni almacena el archivo de YouTube.
+- Es solo para Chrome de escritorio. No funciona como extensión de Android o iPhone.
+- La API de captura exige que el usuario active la extensión desde su icono; una página web sola no puede iniciar esta captura.
+
+**Estado:** prototipo técnico 0.2.0. No presentarlo como transpositor de producción hasta probar y mejorar la calidad auditiva.
