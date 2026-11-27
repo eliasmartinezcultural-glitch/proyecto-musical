@@ -50,7 +50,10 @@ async function start(streamId) {
     const createdEngine = await SignalsmithStretch(context, {
       numberOfInputs: 1,
       numberOfOutputs: 1,
-      outputChannelCount: [2]
+      outputChannelCount: [2],
+      channelCount: 2,
+      channelCountMode: 'explicit',
+      channelInterpretation: 'speakers'
     });
     if (token !== generation) {
       try { createdEngine.disconnect(); } catch (error) {}
