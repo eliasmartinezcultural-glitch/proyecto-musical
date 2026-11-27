@@ -27,5 +27,5 @@ test('schedulePitch sends semitones at the engine latency compensation point', (
 
 test('schedulePitch rejects missing engine or context instead of failing silently', () => {
   assert.throws(() => schedulePitch(null, 1, { currentTime: 0 }), /engine/i);
-  assert.throws(() => schedulePitch({ schedule() {} }, 1, null), /audio context/i);
+  assert.throws(() => schedulePitch({ schedule() {}, latency() { return 0; } }, 1, null), /audio context/i);
 });
