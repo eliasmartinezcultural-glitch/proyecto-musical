@@ -21,7 +21,7 @@ Aplicación web mobile-first para practicar cuarteto en grupo, sin necesitar lee
 4. Seleccionar la rama principal (normalmente `main`) y la carpeta `/ (root)`.
 5. Guardar. GitHub mostrará la dirección pública cuando termine la publicación.
 
-## Importante
+## Aplicación instalable\n\nLa aplicación incluye manifiesto y service worker para instalación y caché básica offline. Estas funciones requieren publicar por HTTPS (GitHub Pages sirve HTTPS). Después de publicar, abrí la página desde Chrome en el celular y usá el menú del navegador para instalar o agregar a pantalla de inicio. La primera visita necesita conexión para guardar los archivos básicos.\n\n## Importante
 
 - Los datos se guardan en el almacenamiento local del navegador/dispositivo. No se sincronizan automáticamente entre teléfonos.
 - Las pistas de audio se seleccionan desde el dispositivo y no se suben al repositorio.
