@@ -4,7 +4,7 @@ export function normalizeSemitones(value) {
   return Math.round(Math.max(-12, Math.min(12, numeric)));
 }
 
-export async function schedulePitch(engine, value, audioContext, preserveFormants = true) {
+export async function schedulePitch(engine, value, audioContext, preserveFormants = true, cachedLatencySeconds) {
   if (!engine || typeof engine.schedule !== 'function' || typeof engine.latency !== 'function') {
     throw new TypeError('Pitch engine is required');
   }
@@ -12,7 +12,7 @@ export async function schedulePitch(engine, value, audioContext, preserveFormant
     throw new TypeError('Audio context is required');
   }
   const semitones = normalizeSemitones(value);
-  const latencyValue = await engine.latency();
+  const latencyValue = Number.isFinite(cachedLatencySeconds) ? cachedLatencySeconds : await engine.latency();
   const latency = Math.max(0, Number(latencyValue) || 0);
   return await engine.schedule({
     semitones,
