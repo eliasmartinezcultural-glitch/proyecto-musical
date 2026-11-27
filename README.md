@@ -13,10 +13,12 @@ Sala web mobile-first para ensayar cuarteto de oído, sin partituras. Mantiene t
 - Ficha con tono, BPM, estado de verificación y sugerencias separadas para voz, teclado y guitarra.
 
 ### 2. Cambiar el tono
-- Rango de −12 a +12 semitonos, botones de ajuste rápido y referencia de tonalidad.
-- La tonalidad escrita se refleja en la vista previa de acordes.
-- La extensión experimental de Chrome puede capturar y procesar el audio de la pestaña activa para aplicar el cambio al sonido de YouTube. Requiere Chrome 116+, instalación manual y activación desde el icono de la extensión.
-- El procesador actual es un prototipo granular; no está certificado como herramienta de calidad de estudio y necesita pruebas auditivas reales.
+- Rango de -12 a +12 semitonos, botones de ajuste rápido y referencia de tonalidad.
+- Motor real-time **Signalsmith Stretch** (WASM + AudioWorklet) incorporado localmente en la extensión Chrome.
+- Captura el audio de la pestaña activa y lo procesa localmente; el reproductor de YouTube sigue dentro de la Sala.
+- El tono y la velocidad son controles separados: cambiar semitonos no cambia el tempo.
+- Opción experimental de compensación de formantes para cuidar el timbre de la voz; puede alterar algunos instrumentos en una mezcla completa.
+- La extensión informa el estado del motor y la latencia estimada.
 
 ### 3. Letra y acordes
 - Editor de letra y acordes por canción. Se pueden escribir acordes entre corchetes, por ejemplo `[C]`, `[G]`, `[Am]`.
@@ -26,12 +28,29 @@ Sala web mobile-first para ensayar cuarteto de oído, sin partituras. Mantiene t
 - Guardado automático local y botón de guardado explícito.
 - Exportación e importación de respaldo JSON para pasar las fichas a otro dispositivo.
 
+## Instalación del motor de audio
+
+La página web sola no puede acceder al audio interno del iframe de YouTube. Por eso el cambio de tono del sonido se realiza mediante la extensión de Chrome:
+
+1. Descargar el repositorio como ZIP desde GitHub y descomprimirlo.
+2. Abrir `chrome://extensions`, activar Modo de desarrollador y elegir Cargar descomprimida.
+3. Seleccionar la carpeta `chrome-extension`.
+4. Abrir la Sala publicada, reproducir una canción y hacer clic en el icono de Ocarina.
+5. Esperar el mensaje **Signalsmith listo** y cambiar semitonos desde la Sala.
+
+Guía completa: [chrome-extension/README.md](./chrome-extension/README.md).
+
+## Motor y créditos
+
+Se incorpora la distribución Web Audio de [Signalsmith Stretch](https://github.com/Signalsmith-Audio/signalsmith-stretch), con WASM y AudioWorklet, desde su distribución oficial. La licencia MIT está incluida en `chrome-extension/vendor/LICENSE-SignalsmithStretch.txt`. No se usa CDN para el motor DSP y no se envía audio a servidores.
+
 ## Límites y transparencia
 
-- La API oficial de YouTube no permite a una página web acceder directamente al audio del reproductor para procesarlo. Por eso el cambio de tono del audio se realiza mediante la extensión de Chrome, no desde JavaScript de la página por sí solo.
-- La extensión usa `chrome.tabCapture`, un documento offscreen y AudioWorklet. Chrome requiere un gesto explícito del usuario para iniciar la captura. Mientras captura, el audio original se redirige por el motor para volver a salir procesado. Documentación: [tabCapture](https://developer.chrome.com/docs/extensions/reference/api/tabCapture), [offscreen](https://developer.chrome.com/docs/extensions/reference/api/offscreen).
-- El cambio de tono todavía es experimental y puede producir artefactos. Debe probarse en el Chrome real del equipo antes de usarlo en ensayos importantes.
-- La extensión funciona en Chrome de escritorio, no en Android ni iPhone.
+- La extensión requiere Chrome de escritorio 116 o posterior y activación explícita desde su icono.
+- No funciona como extensión en Android o iPhone.
+- La compensación de formantes es experimental en una mezcla polifónica; puede cambiar el timbre de instrumentos.
+- La latencia depende del equipo y del navegador.
+- La integración de código y los controles tienen pruebas automatizadas. La calidad sonora y la carga efectiva de WASM/AudioWorklet deben validarse escuchando en Chrome real; no se presentan como certificadas.
 - Algunos videos no permiten reproducción insertada; algunas velocidades no están disponibles en todos los videos.
 - No se descargan, extraen, alojan ni re-almacenan canciones.
 
@@ -41,10 +60,10 @@ El catálogo está en [repertorio-30.json](./repertorio-30.json). Los enlaces pr
 
 ## Datos y privacidad
 
-- Letras, notas, tono elegido y enlaces se guardan en el almacenamiento local del navegador.
+- Letras, notas, tono elegido, compensación de formantes y enlaces se guardan en el almacenamiento local del navegador.
 - No hay cuentas ni sincronización automática en vivo entre los tres músicos.
 - El respaldo JSON permite mover las fichas manualmente; no incluye el audio.
-- El audio se transmite desde YouTube y no se guarda en el repositorio.
+- El audio se transmite desde YouTube y se procesa en el navegador.
 
 ## Publicación
 
@@ -52,7 +71,7 @@ En GitHub: **Settings → Pages → Deploy from a branch → main → /(root)**.
 
 URL prevista: https://eliasmartinezcultural-glitch.github.io/proyecto-musical/
 
-Después de publicar, probar en Chrome de escritorio: reproducción insertada, selección de canciones, repetición A–B, velocidades, guardado y restauración de fichas, instalación de la extensión y calidad del audio transpuesto. Si una versión anterior sigue apareciendo, recargar la página; el service worker ahora utiliza caché `sala-ensayo-v8`.
+Después de publicar, probar en Chrome de escritorio: reproducción insertada, selección de canciones, repetición A–B, velocidades, guardado y restauración de fichas, instalación de la extensión y calidad del audio transpuesto. El service worker utiliza caché `sala-ensayo-v9`.
 
 ## Criterio de diseño
 
