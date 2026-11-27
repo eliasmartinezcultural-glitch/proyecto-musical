@@ -1,0 +1,15 @@
+{
+  "name": "Elías Martínez · Sala de ensayo",
+  "short_name": "Sala de ensayo",
+  "description": "Canciones, acordes y práctica para voz, teclado y guitarra.",
+  "lang": "es-AR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#100e13",
+  "theme_color": "#17131a",
+  "icons": [
+    {"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
