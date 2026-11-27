@@ -119,3 +119,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.tabs.onRemoved.addListener(tabId => {
   if (tabId === activeTabId) stopCapture(tabId, 'Pestaña cerrada.');
 });
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  const allowedUrl = 'https://eliasmartinezcultural-glitch.github.io/proyecto-musical/';
+  if (tabId === activeTabId && changeInfo.url && !changeInfo.url.startsWith(allowedUrl)) {
+    stopCapture(tabId, 'Saliste de la Sala. El motor se detuvo por seguridad.');
+  }
+});
