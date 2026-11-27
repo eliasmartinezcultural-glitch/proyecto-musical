@@ -49,6 +49,7 @@ Se incorpora la distribución Web Audio de [Signalsmith Stretch](https://github.
 - La extensión requiere Chrome de escritorio 116 o posterior y activación explícita desde su icono.
 - No funciona como extensión en Android o iPhone.
 - La compensación de formantes es experimental en una mezcla polifónica; puede cambiar el timbre de instrumentos.
+- La entrada se normaliza a dos canales para capturas mono o estéreo.
 - La latencia depende del equipo y del navegador.
 - La integración de código y los controles tienen pruebas automatizadas. La calidad sonora y la carga efectiva de WASM/AudioWorklet deben validarse escuchando en Chrome real; no se presentan como certificadas.
 - Algunos videos no permiten reproducción insertada; algunas velocidades no están disponibles en todos los videos.
