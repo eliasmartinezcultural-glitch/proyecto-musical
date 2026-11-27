@@ -84,8 +84,9 @@ async function start(streamId, requestedPreset = qualityPreset) {
     engine.connect(context.destination);
     await engine.start();
     if (token !== generation) return;
-    engineLatency = await engine.latency();
+    engineLatency = engine.latency();
     await schedulePitch(engine, latestPitch, context, preserveFormants, engineLatency);
+    if (token !== generation) return;
     const latencySeconds = engineLatency;
     chrome.runtime.sendMessage({
       target: 'background',
@@ -94,7 +95,7 @@ async function start(streamId, requestedPreset = qualityPreset) {
     });
   } catch (error) {
     const cancelled = token !== generation;
-    await stop();
+    if (!cancelled) await stop();
     if (!cancelled) {
       chrome.runtime.sendMessage({
         target: 'background',
