@@ -116,22 +116,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
   if (message?.type === 'SALA_STOP') {
-    stopCapture(activeTabId, 'Motor detenido desde la Sala.');
+    stopCapture(activeTabId ?? sender.tab?.id, 'Motor detenido desde la Sala.');
     sendResponse({ ok: true });
     return;
   }
   if (message?.type === 'SALA_STATUS') {
-    chrome.tabCapture.getCapturedTabs()
-      .then(tabs => {
-        const captureActive = tabs.some(item => item.tabId === sender.tab?.id && item.status === 'active');
-        sendResponse({
-          active: engineReady && captureActive,
-          captureActive,
-          engineReady,
-          message: engineReady ? engineMessage : (captureActive ? 'Captura activa; el motor todavía está iniciando.' : engineMessage)
-        });
-      })
-      .catch(() => sendResponse({ active: false, captureActive: false, engineReady: false, message: 'No se pudo consultar la captura.' }));
+    Promise.all([
+      chrome.tabCapture.getCapturedTabs(),
+      chrome.runtime.sendMessage({ target: 'offscreen', type: 'GET_STATUS' }).catch(() => null)
+    ]).then(([tabs, audioStatus]) => {
+      const captureActive = tabs.some(item => item.tabId === sender.tab?.id && item.status === 'active');
+      engineReady = Boolean(captureActive && audioStatus?.active);
+      if (engineReady) {
+        activeTabId = sender.tab.id;
+        engineMessage = `Signalsmith listo · ${audioStatus.latencyMs} ms · ${audioStatus.qualityPreset === 'cheaper' ? 'ahorro de CPU' : 'calidad estándar'}`;
+      } else if (!captureActive) {
+        engineReady = false;
+        activeTabId = null;
+      }
+      sendResponse({
+        active: engineReady,
+        captureActive,
+        engineReady,
+        message: engineReady ? engineMessage : (captureActive ? 'Captura activa; el motor todavía está iniciando.' : engineMessage)
+      });
+    }).catch(() => sendResponse({ active: false, captureActive: false, engineReady: false, message: 'No se pudo consultar la captura.' }));
     return true;
   }
 });
