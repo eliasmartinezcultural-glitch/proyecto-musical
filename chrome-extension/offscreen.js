@@ -61,18 +61,22 @@ async function start(streamId) {
     await engine.start();
     if (token !== generation) return;
     await schedulePitch(engine, latestPitch, context, preserveFormants);
+    const latencySeconds = await engine.latency();
     chrome.runtime.sendMessage({
       target: 'background',
       type: 'ENGINE_READY',
-      message: `Signalsmith listo · ${Math.round(engine.latency() * 1000)} ms de latencia`
+      message: `Signalsmith listo · ${Math.round(latencySeconds * 1000)} ms de latencia`
     });
   } catch (error) {
+    const cancelled = token !== generation;
     await stop();
-    chrome.runtime.sendMessage({
-      target: 'background',
-      type: 'ENGINE_ERROR',
-      message: error?.message || 'No se pudo iniciar el motor de audio.'
-    });
+    if (!cancelled) {
+      chrome.runtime.sendMessage({
+        target: 'background',
+        type: 'ENGINE_ERROR',
+        message: error?.message || 'No se pudo iniciar el motor de audio.'
+      });
+    }
   }
 }
 
