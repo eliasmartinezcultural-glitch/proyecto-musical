@@ -37,3 +37,5 @@ chrome.runtime.onMessage.addListener(message => {
     }, location.origin);
   }
 });
+
+window.postMessage({ source: 'ocarina-transpose', type: 'BRIDGE_READY' }, location.origin);
