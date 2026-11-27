@@ -89,7 +89,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'SALA_STATUS') {
     chrome.tabCapture.getCapturedTabs()
-      .then(tabs => sendResponse({ active: tabs.some(item => item.tabId === activeTabId && item.status === 'active') }))
+      .then(tabs => sendResponse({ active: tabs.some(item => item.tabId === sender.tab?.id && item.status === 'active') }))
       .catch(() => sendResponse({ active: false }));
     return true;
   }
