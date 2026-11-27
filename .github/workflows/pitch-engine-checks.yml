@@ -1,0 +1,29 @@
+name: Sala pitch engine checks
+
+on:
+  push:
+    branches: [main, feature/realtime-pitch-engine]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test pitch controller
+        run: node --test tests/pitch-control.test.mjs
+      - name: Check JavaScript syntax
+        run: |
+          node --check tono.js
+          node --check chrome-extension/background.js
+          node --check chrome-extension/content.js
+          node --check chrome-extension/offscreen.js
+          node --check chrome-extension/pitch-control.js
+      - name: Validate extension manifest
+        run: node -e "JSON.parse(require('node:fs').readFileSync('chrome-extension/manifest.json', 'utf8'))"

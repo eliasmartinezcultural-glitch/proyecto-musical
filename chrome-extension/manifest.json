@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Ocarina · Transpositor de Sala",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "minimum_chrome_version": "116",
-  "description": "Transpone el audio de YouTube que suena dentro de la Sala de Ensayo.",
+  "description": "Cambia el tono del audio de la Sala de Ensayo en tiempo real con procesamiento local WASM.",
   "permissions": [
     "activeTab",
     "tabCapture",
@@ -28,5 +28,8 @@
       ],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
 }
