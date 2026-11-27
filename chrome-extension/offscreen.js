@@ -8,6 +8,7 @@ let engine = null;
 let generation = 0;
 let latestPitch = 0;
 let preserveFormants = true;
+let engineLatency = 0;
 
 async function stop() {
   generation += 1;
@@ -19,6 +20,7 @@ async function stop() {
   source = null;
   stream = null;
   context = null;
+  engineLatency = 0;
   try { await oldEngine?.stop?.(); } catch (error) {}
   try { oldSource?.disconnect(); oldEngine?.disconnect(); } catch (error) {}
   oldStream?.getTracks?.().forEach(track => track.stop());
@@ -60,8 +62,9 @@ async function start(streamId) {
     engine.connect(context.destination);
     await engine.start();
     if (token !== generation) return;
-    await schedulePitch(engine, latestPitch, context, preserveFormants);
-    const latencySeconds = await engine.latency();
+    engineLatency = await engine.latency();
+    await schedulePitch(engine, latestPitch, context, preserveFormants, engineLatency);
+    const latencySeconds = engineLatency;
     chrome.runtime.sendMessage({
       target: 'background',
       type: 'ENGINE_READY',
@@ -85,7 +88,7 @@ function updatePitch(value, keepFormants) {
   if (typeof keepFormants === 'boolean') preserveFormants = keepFormants;
   if (!engine || !context) return;
   const currentEngine = engine;
-  schedulePitch(currentEngine, latestPitch, context, preserveFormants).catch(error => {
+  schedulePitch(currentEngine, latestPitch, context, preserveFormants, engineLatency).catch(error => {
     if (engine === currentEngine) {
       chrome.runtime.sendMessage({ target: 'background', type: 'ENGINE_ERROR', message: error?.message || 'Falló el cambio de tono.' });
     }
