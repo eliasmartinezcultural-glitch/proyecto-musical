@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#17131a"><meta name="description" content="Sala de ensayo musical de Elías Martínez: canciones, letras, acordes y práctica para voz, teclado y guitarra.">
+<meta name="theme-color" content="#17131a"><meta name="description" content="Sala de ensayo musical de Elías Martínez: canciones, letras, acordes y práctica para voz, teclado y guitarra."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Sala de ensayo">
 <title>Elías Martínez · Sala de ensayo</title>
 <style>
 :root{--bg:#100e13;--panel:#1b1720;--panel2:#241e29;--line:#39303e;--text:#f8f3f7;--muted:#b9acba;--gold:#e9b967;--red:#bd5263;--green:#76c5a0;--blue:#86b7e8;--radius:19px}
@@ -90,6 +90,6 @@ function transpose(delta){const input=document.getElementById('transposeInput').
 function resetTranspose(){document.getElementById('transposeOutput').value=document.getElementById('transposeInput').value}
 function copyTranspose(){const t=document.getElementById('transposeOutput').value;if(!t)return alert('Primero transponé la letra.');navigator.clipboard?.writeText(t).then(()=>alert('Copiado.')).catch(()=>alert('Seleccioná el resultado y copialo manualmente.'))}
 function saveStructure(){const value=document.getElementById('structureNotes').value;if(!value.trim())return alert('Escribí primero la estructura.');db.bandNotes=(db.bandNotes?db.bandNotes+'\\n\\n':'')+'ESTRUCTURA DE CANCIÓN\\n'+value;persist();alert('Estructura guardada en la sala de músicos.')}
-load();initChords();renderHome();renderSongs();deleteSongBtn(false);
+load();initChords();renderHome();renderSongs();deleteSongBtn(false);\nif('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 window.addEventListener('beforeunload',stopMetro);
 </script></body></html>
