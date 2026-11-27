@@ -1,41 +1,59 @@
 # Elías Martínez · Cuarteto — Sala de ensayo
 
-Sala web mobile-first para ensayar canciones populares de oído, sin partituras y con una navegación de tres funciones: escuchar, cambiar el tono y trabajar letra/acordes.
+Sala web mobile-first para ensayar cuarteto de oído, sin partituras. Mantiene tres espacios principales: **escuchar**, **cambiar el tono** y **letra/acordes**.
 
-## Cómo funciona hoy
+## Funciones integradas
 
-- Reproductor oficial de YouTube insertado dentro de `tono.html`: la banda permanece en la Sala durante el ensayo.
-- Se puede elegir una canción con fuente precargada o pegar un enlace de YouTube y guardarlo por canción en ese dispositivo.
-- Controles de reproducción/pausa, salto de 5 segundos, posición, volumen, velocidades que YouTube permita para ese video y repetición de fragmento A–B.
-- Ficha local de letra y acordes.
-- Transposición de los acordes escritos por semitonos, con tonalidad de referencia y vista previa.
-- La Sala no descarga ni aloja canciones. El video sigue siendo servido por YouTube.
+### 1. Escuchar
+- Catálogo dinámico de 31 canciones cargado desde `repertorio-30.json`, con buscador por artista o título.
+- Reproductor oficial de YouTube incrustado en la misma página.
+- Enlaces de video por canción guardados localmente; el grupo puede reemplazar la referencia por su versión preferida.
+- Reproducir/pausar, anterior/siguiente, saltos de 10 segundos, barra de posición, volumen y velocidades que YouTube admita para cada video.
+- Marcadores A–B para repetir un fragmento.
+- Ficha con tono, BPM, estado de verificación y sugerencias separadas para voz, teclado y guitarra.
 
-## Límite técnico que no se oculta
+### 2. Cambiar el tono
+- Rango de −12 a +12 semitonos, botones de ajuste rápido y referencia de tonalidad.
+- La tonalidad escrita se refleja en la vista previa de acordes.
+- La extensión experimental de Chrome puede capturar y procesar el audio de la pestaña activa para aplicar el cambio al sonido de YouTube. Requiere Chrome 116+, instalación manual y activación desde el icono de la extensión.
+- El procesador actual es un prototipo granular; no está certificado como herramienta de calidad de estudio y necesita pruebas auditivas reales.
 
-La API oficial de YouTube no entrega el audio del reproductor a la página para procesarlo. Por eso esta versión **todavía no transpone el sonido del video**: el control de semitonos adapta los acordes escritos, no el audio. La velocidad de YouTube tampoco garantiza todos los valores para todos los videos.
+### 3. Letra y acordes
+- Editor de letra y acordes por canción. Se pueden escribir acordes entre corchetes, por ejemplo `[C]`, `[G]`, `[Am]`.
+- Inserción rápida de etiquetas de intro, estrofa, estribillo, puente y final.
+- Vista previa de acordes transpuestos.
+- Notas separadas para voz, teclado, guitarra y estructura.
+- Guardado automático local y botón de guardado explícito.
+- Exportación e importación de respaldo JSON para pasar las fichas a otro dispositivo.
 
-Se agregó una extensión experimental propia de Chrome en la carpeta [chrome-extension](./chrome-extension/). Captura el audio de la pestaña activa con `chrome.tabCapture`, lo procesa mediante AudioWorklet y recibe los semitonos desde el control de esta misma Sala. Para activarla hay que instalar la carpeta como extensión descomprimida y hacer clic una vez en su icono con la pestaña de la Sala activa. Después, los controles permanecen dentro de `tono.html`. El procesador granular es un prototipo: puede generar artefactos y todavía requiere pruebas reales de audio y compatibilidad antes de considerarse terminado. No descarga ni re-almacena canciones.
+## Límites y transparencia
 
-## Repertorio
+- La API oficial de YouTube no permite a una página web acceder directamente al audio del reproductor para procesarlo. Por eso el cambio de tono del audio se realiza mediante la extensión de Chrome, no desde JavaScript de la página por sí solo.
+- La extensión usa `chrome.tabCapture`, un documento offscreen y AudioWorklet. Chrome requiere un gesto explícito del usuario para iniciar la captura. Mientras captura, el audio original se redirige por el motor para volver a salir procesado. Documentación: [tabCapture](https://developer.chrome.com/docs/extensions/reference/api/tabCapture), [offscreen](https://developer.chrome.com/docs/extensions/reference/api/offscreen).
+- El cambio de tono todavía es experimental y puede producir artefactos. Debe probarse en el Chrome real del equipo antes de usarlo en ensayos importantes.
+- La extensión funciona en Chrome de escritorio, no en Android ni iPhone.
+- Algunos videos no permiten reproducción insertada; algunas velocidades no están disponibles en todos los videos.
+- No se descargan, extraen, alojan ni re-almacenan canciones.
 
-El catálogo de trabajo está en [repertorio-30.json](./repertorio-30.json). Los enlaces de YouTube precargados son referencias de partida, no certificación de que cada versión sea la grabación correcta. Para “Bum, bum, bum” de Omega la identidad del tema y su álbum *Lo Que Suena* están documentados, pero todavía no hay un video de YouTube verificado cargado en la Sala; se puede conectar el enlace correcto cuando la banda lo confirme.
+## Repertorio y verificación
+
+El catálogo está en [repertorio-30.json](./repertorio-30.json). Los enlaces precargados son referencias de trabajo: comprobar que artista, versión y fragmento coincidan antes de ensayar. Para **Omega — “Bum, bum, bum”**, que queda seleccionada al abrir la Sala, todavía falta conectar una versión de YouTube que la banda confirme. No se inventa una pista ni una tonalidad.
 
 ## Datos y privacidad
 
-- Letras, acordes y enlaces elegidos se guardan en el almacenamiento local del navegador.
-- No hay cuentas ni sincronización automática entre dispositivos.
-- El audio de YouTube no se descarga ni se sube al repositorio.
-- Para compartir fichas entre músicos habrá que incorporar exportación/importación o una base sincronizada en una etapa posterior.
+- Letras, notas, tono elegido y enlaces se guardan en el almacenamiento local del navegador.
+- No hay cuentas ni sincronización automática en vivo entre los tres músicos.
+- El respaldo JSON permite mover las fichas manualmente; no incluye el audio.
+- El audio se transmite desde YouTube y no se guarda en el repositorio.
 
-## Publicar con GitHub Pages
+## Publicación
 
-En el repositorio, abrir **Settings → Pages**, seleccionar **Deploy from a branch**, rama `main`, carpeta `/(root)` y guardar.
+En GitHub: **Settings → Pages → Deploy from a branch → main → /(root)**.
 
 URL prevista: https://eliasmartinezcultural-glitch.github.io/proyecto-musical/
 
-Después de publicar, probar en Chrome de escritorio: reproducción embebida, enlaces que permiten inserción, velocidad disponible, repetición A–B y guardado local. La extensión de audio es solo para Chrome de escritorio; no se instala en Android ni en iPhone. GitHub Pages puede tardar unos minutos en actualizarse y el service worker puede conservar una versión anterior; recargar la página o borrar los datos del sitio si no aparecen los cambios.
+Después de publicar, probar en Chrome de escritorio: reproducción insertada, selección de canciones, repetición A–B, velocidades, guardado y restauración de fichas, instalación de la extensión y calidad del audio transpuesto. Si una versión anterior sigue apareciendo, recargar la página; el service worker ahora utiliza caché `sala-ensayo-v8`.
 
-## Principios
+## Criterio de diseño
 
-Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes y trabajo de voz, teclado y guitarra sin exigir lectura musical.
+Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes, navegación móvil y trabajo compartido de voz, teclado y guitarra sin exigir lectura musical.
