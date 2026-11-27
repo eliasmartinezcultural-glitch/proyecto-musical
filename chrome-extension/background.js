@@ -1,5 +1,6 @@
 let activeTabId = null;
 let creating = null;
+let qualityPreset = 'default';
 
 async function ensureOffscreen() {
   const url = chrome.runtime.getURL('offscreen.html');
@@ -51,7 +52,7 @@ chrome.action.onClicked.addListener(async tab => {
     activeTabId = tab.id;
     await notifyTab(tab.id, false, 'Iniciando motor de audio Signalsmith…');
     const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id });
-    await chrome.runtime.sendMessage({ target: 'offscreen', type: 'START_CAPTURE', streamId });
+    await chrome.runtime.sendMessage({ target: 'offscreen', type: 'START_CAPTURE', streamId, qualityPreset });
   } catch (error) {
     const message = 'No se pudo activar el motor: ' + (error?.message || 'revisá permisos y compatibilidad de Chrome');
     await notifyTab(tab.id, false, message);
@@ -68,6 +69,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.target === 'background' && message.type === 'ENGINE_ERROR') {
     const oldTabId = activeTabId;
     stopCapture(oldTabId, 'No se pudo procesar el audio: ' + (message.message || 'error desconocido'));
+    return;
+  }
+  if (message?.target === 'background' && message.type === 'ENGINE_STOPPED') {
+    const oldTabId = activeTabId;
+    activeTabId = null;
+    notifyTab(oldTabId, false, message.message || 'La captura de audio se detuvo.');
+    return;
+  }
+  if (message?.type === 'SALA_QUALITY') {
+    qualityPreset = message.qualityPreset === 'cheaper' ? 'cheaper' : 'default';
+    sendResponse({ ok: true, qualityPreset, appliesOnNextStart: true });
     return;
   }
   if (message?.type === 'SALA_PITCH') {
