@@ -66,3 +66,39 @@ Una vez publicado por HTTPS, abrir el enlace desde Chrome en Android y elegir **
 ## Principios del proyecto
 
 Primero el oído, lo visual y lo práctico. Lenguaje cotidiano, botones grandes y navegación simple para músicos populares que están aprendiendo juntos.
+
+
+## Reproductor online de ensayo
+
+Se incorporó una sala de reproducción basada en el reproductor oficial de YouTube (IFrame Player API). No descarga ni copia archivos de audio: reproduce los videos desde YouTube dentro de la página.
+
+Funciones implementadas:
+- Reproducción y pausa.
+- Avance y retroceso de 5 y 10 segundos.
+- Barra de posición y duración.
+- Control de volumen.
+- Selector de velocidad (solo valores que el video admite).
+- Marcadores A y B con repetición de fragmento.
+- Navegación anterior/siguiente entre canciones que ya tienen una fuente conectada.
+- Enlace de YouTube guardado localmente por canción; se puede conectar una versión exacta pegando su URL y, si es un medley, el segundo de inicio.
+- Acceso desde el reproductor a la ficha de acordes y arreglo.
+
+Fuentes conectadas de partida:
+- Pepo Lara — 5 Minutos (canal Pepo Lara - Topic).
+- Omega — La Mariposa (video oficial).
+- Omega — Mi razón de ser (video de referencia publicado por Canal 13 San Juan).
+- Omega — Te Deseo ft. Monada (video oficial).
+- Banda Registrada — Kilómetros (referencia vinculada desde Chordify).
+- Jean Carlos — Quiéreme, Tu amante en secreto, A puro dolor, Piensa en mí, Regresa a mí y Tú vas a volar (segmentos con inicio marcado dentro de una presentación en vivo de Un Poco de Ruido).
+
+Para otras canciones, el botón Conectar permite buscar la versión en YouTube y guardar el enlace una sola vez. Hay que verificar que sea la versión correcta y que el titular permita su reproducción embebida.
+
+### Limitaciones importantes
+
+- YouTube permite controlar reproducción, pausa, volumen, posición y velocidades disponibles, pero no garantiza todas las velocidades en todos los videos.
+- La API de YouTube no entrega el audio interno para que esta página lo procese. Por eso, en este modo no se puede cambiar el tono del audio de manera independiente.
+- El transpositor de acordes sí cambia los acordes escritos, pero eso no cambia el tono de la grabación.
+- Para tener cambio real de tono y tempo independiente en la grabación sin subir archivos locales, necesitamos una fuente de audio directa, accesible desde el navegador y autorizada para ese uso (por ejemplo, un stream de pistas propias o con permiso del titular y CORS habilitado). Con esa fuente se puede integrar un motor de audio como SoundTouchJS AudioWorklet. No se debe extraer audio de YouTube ni de Spotify.
+- Los enlaces y preferencias agregados por el usuario se guardan en el almacenamiento local del navegador de ese dispositivo. No se sincronizan automáticamente entre los celulares de los tres músicos.
+
+El reproductor es un primer motor online funcional a nivel de interfaz y control API; antes de declararlo probado en producción, hay que verificarlo en la URL publicada, en Chrome Android y en Safari/iPhone, y comprobar los permisos de reproducción de cada video.
