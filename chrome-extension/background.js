@@ -41,6 +41,11 @@ async function stopCapture(tabId, message = 'Transposición detenida.') {
 
 chrome.action.onClicked.addListener(async tab => {
   if (!tab?.id) return;
+  const allowedUrl = 'https://eliasmartinezcultural-glitch.github.io/proyecto-musical/';
+  if (!tab.url?.startsWith(allowedUrl)) {
+    await chrome.action.setTitle({ tabId: tab.id, title: 'Abrí la Sala de Ensayo para usar el transpositor Ocarina' });
+    return;
+  }
   try {
     await qualitySave;
     const savedPreferences = await chrome.storage.local.get('qualityPreset');
