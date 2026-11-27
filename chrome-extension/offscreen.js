@@ -80,8 +80,11 @@ function updatePitch(value, keepFormants) {
   latestPitch = normalizeSemitones(value);
   if (typeof keepFormants === 'boolean') preserveFormants = keepFormants;
   if (!engine || !context) return;
-  schedulePitch(engine, latestPitch, context, preserveFormants).catch(error => {
-    chrome.runtime.sendMessage({ target: 'background', type: 'ENGINE_ERROR', message: error?.message || 'Falló el cambio de tono.' });
+  const currentEngine = engine;
+  schedulePitch(currentEngine, latestPitch, context, preserveFormants).catch(error => {
+    if (engine === currentEngine) {
+      chrome.runtime.sendMessage({ target: 'background', type: 'ENGINE_ERROR', message: error?.message || 'Falló el cambio de tono.' });
+    }
   });
 }
 
