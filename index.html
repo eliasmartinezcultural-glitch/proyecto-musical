@@ -91,7 +91,7 @@ function transpose(delta){const input=document.getElementById('transposeInput').
 function resetTranspose(){document.getElementById('transposeOutput').value=document.getElementById('transposeInput').value}
 function copyTranspose(){const t=document.getElementById('transposeOutput').value;if(!t)return alert('Primero transponé la letra.');navigator.clipboard?.writeText(t).then(()=>alert('Copiado.')).catch(()=>alert('Seleccioná el resultado y copialo manualmente.'))}
 function saveStructure(){const value=document.getElementById('structureNotes').value;if(!value.trim())return alert('Escribí primero la estructura.');db.bandNotes=(db.bandNotes?db.bandNotes+String.fromCharCode(10,10):'')+'ESTRUCTURA DE CANCIÓN'+String.fromCharCode(10)+value;persist();alert('Estructura guardada en la sala de músicos.')}
-load();initChords();renderHome();renderSongs();deleteSongBtn(false);renderCatalog();
+load();initChords();renderHome();renderSongs();deleteSongBtn(false);
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 window.addEventListener('beforeunload',stopMetro);
 
