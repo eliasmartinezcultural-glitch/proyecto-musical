@@ -20,10 +20,10 @@ test('normalizeSemitones handles invalid and fractional values safely', () => {
   assert.equal(normalizeSemitones(2.7), 3);
 });
 
-test('schedulePitch awaits the engine latency before scheduling semitones', async () => {
+test('schedulePitch uses the engine's synchronous latency before scheduling semitones', async () => {
   const calls = [];
   const engine = {
-    latency: async () => 0.12,
+    latency: () => 0.12,
     schedule: value => { calls.push(value); return Promise.resolve(); }
   };
   const context = { currentTime: 10 };
