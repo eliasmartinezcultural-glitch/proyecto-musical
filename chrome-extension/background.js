@@ -67,8 +67,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.target === 'background' && message.type === 'ENGINE_ERROR') {
     const oldTabId = activeTabId;
-    activeTabId = null;
-    notifyTab(oldTabId, false, 'No se pudo procesar el audio: ' + (message.message || 'error desconocido'));
+    stopCapture(oldTabId, 'No se pudo procesar el audio: ' + (message.message || 'error desconocido'));
     return;
   }
   if (message?.type === 'SALA_PITCH') {
