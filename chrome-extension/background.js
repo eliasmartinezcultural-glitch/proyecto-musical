@@ -2,6 +2,8 @@ let activeTabId = null;
 let creating = null;
 let qualityPreset = 'default';
 let qualitySave = Promise.resolve();
+let engineReady = false;
+let engineMessage = 'Motor detenido.';
 
 async function ensureOffscreen() {
   const url = chrome.runtime.getURL('offscreen.html');
@@ -36,6 +38,8 @@ async function stopCapture(tabId, message = 'Transposición detenida.') {
   try { await chrome.runtime.sendMessage({ target: 'offscreen', type: 'STOP_CAPTURE' }); } catch (error) {}
   const oldTabId = tabId ?? activeTabId;
   activeTabId = null;
+  engineReady = false;
+  engineMessage = message;
   await notifyTab(oldTabId, false, message);
 }
 
@@ -59,7 +63,9 @@ chrome.action.onClicked.addListener(async tab => {
     if (captured.length) await stopCapture(captured[0].tabId, 'Cambiando la pestaña procesada…');
     await ensureOffscreen();
     activeTabId = tab.id;
-    await notifyTab(tab.id, false, 'Iniciando motor de audio Signalsmith…');
+    engineReady = false;
+    engineMessage = 'Iniciando motor de audio Signalsmith…';
+    await notifyTab(tab.id, false, engineMessage);
     const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id });
     await chrome.runtime.sendMessage({ target: 'offscreen', type: 'START_CAPTURE', streamId, qualityPreset });
   } catch (error) {
@@ -72,10 +78,14 @@ chrome.action.onClicked.addListener(async tab => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.target === 'offscreen') return;
   if (message?.target === 'background' && message.type === 'ENGINE_READY') {
-    notifyTab(activeTabId, true, message.message || 'Motor de audio listo. Ajustá los semitonos desde la Sala.');
+    engineReady = true;
+    engineMessage = message.message || 'Motor de audio listo. Ajustá los semitonos desde la Sala.';
+    notifyTab(activeTabId, true, engineMessage);
     return;
   }
   if (message?.target === 'background' && message.type === 'ENGINE_ERROR') {
+    engineReady = false;
+    engineMessage = 'No se pudo procesar el audio: ' + (message.message || 'error desconocido');
     const oldTabId = activeTabId;
     stopCapture(oldTabId, 'No se pudo procesar el audio: ' + (message.message || 'error desconocido'));
     return;
@@ -83,7 +93,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.target === 'background' && message.type === 'ENGINE_STOPPED') {
     const oldTabId = activeTabId;
     activeTabId = null;
-    notifyTab(oldTabId, false, message.message || 'La captura de audio se detuvo.');
+    engineReady = false;
+    engineMessage = message.message || 'La captura de audio se detuvo.';
+    notifyTab(oldTabId, false, engineMessage);
     return;
   }
   if (message?.type === 'SALA_QUALITY') {
@@ -110,8 +122,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'SALA_STATUS') {
     chrome.tabCapture.getCapturedTabs()
-      .then(tabs => sendResponse({ active: tabs.some(item => item.tabId === sender.tab?.id && item.status === 'active') }))
-      .catch(() => sendResponse({ active: false }));
+      .then(tabs => {
+        const captureActive = tabs.some(item => item.tabId === sender.tab?.id && item.status === 'active');
+        sendResponse({
+          active: engineReady && captureActive,
+          captureActive,
+          engineReady,
+          message: engineReady ? engineMessage : (captureActive ? 'Captura activa; el motor todavía está iniciando.' : engineMessage)
+        });
+      })
+      .catch(() => sendResponse({ active: false, captureActive: false, engineReady: false, message: 'No se pudo consultar la captura.' }));
     return true;
   }
 });
