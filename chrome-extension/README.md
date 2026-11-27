@@ -9,9 +9,10 @@ Extensión de Chrome de escritorio para cambiar el tono del audio que se reprodu
 3. Abrí `chrome://extensions` en Chrome.
 4. Activá **Modo de desarrollador**.
 5. Elegí **Cargar descomprimida** y seleccioná la carpeta `chrome-extension` que está dentro del ZIP.
-6. Abrí la Sala publicada en GitHub Pages y reproducí una canción.
-7. Hacé clic en el icono de Ocarina en la barra de Chrome. Esperá el mensaje **Signalsmith listo**.
-8. Volvé a la Sala y mové el control de semitonos.
+6. Si ya habías instalado la versión experimental anterior, quitá esa extensión desde `chrome://extensions` para no dejar dos versiones activas.
+7. Abrí la Sala publicada en GitHub Pages y reproducí una canción.
+8. Hacé clic en el icono de Ocarina en la barra de Chrome. Esperá el mensaje **Signalsmith listo**.
+9. Volvé a la Sala y mové el control de semitonos.
 
 Para detener el procesamiento, hacé clic otra vez en el icono de Ocarina o tocá **Detener motor** en la Sala.
 
