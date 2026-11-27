@@ -4,15 +4,25 @@ let creating = null;
 async function ensureOffscreen() {
   const url = chrome.runtime.getURL('offscreen.html');
   const contexts = await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'], documentUrls: [url] });
-  if (contexts.length) return;
-  if (!creating) {
-    creating = chrome.offscreen.createDocument({
-      url: 'offscreen.html',
-      reasons: ['USER_MEDIA'],
-      justification: 'Procesar localmente el audio de la pestaña activa para cambiar el tono en la Sala de Ensayo.'
-    });
+  if (!contexts.length) {
+    if (!creating) {
+      creating = chrome.offscreen.createDocument({
+        url: 'offscreen.html',
+        reasons: ['USER_MEDIA'],
+        justification: 'Procesar localmente el audio de la pestaña activa para cambiar el tono en la Sala de Ensayo.'
+      });
+    }
+    try { await creating; } finally { creating = null; }
   }
-  try { await creating; } finally { creating = null; }
+  let ready = false;
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    try {
+      const response = await chrome.runtime.sendMessage({ target: 'offscreen', type: 'PING' });
+      if (response?.ready) { ready = true; break; }
+    } catch (error) {}
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  if (!ready) throw new Error('El documento de audio no respondió. Recargá la extensión y volvé a intentar.');
 }
 
 async function notifyTab(tabId, active, message = '') {
