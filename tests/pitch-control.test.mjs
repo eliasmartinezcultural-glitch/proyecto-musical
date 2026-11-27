@@ -25,6 +25,13 @@ test('schedulePitch sends semitones at the engine latency compensation point', (
   assert.deepEqual(calls, [{ semitones: -3, output: 10.12, formantCompensation: true, formantBaseHz: 0 }]);
 });
 
+test('schedulePitch can disable formant compensation for full-band mixes', () => {
+  let scheduled;
+  const engine = { latency: () => 0, schedule: value => { scheduled = value; } };
+  schedulePitch(engine, 2, { currentTime: 4 }, false);
+  assert.equal(scheduled.formantCompensation, false);
+});
+
 test('schedulePitch rejects missing engine or context instead of failing silently', () => {
   assert.throws(() => schedulePitch(null, 1, { currentTime: 0 }), /engine/i);
   assert.throws(() => schedulePitch({ schedule() {}, latency() { return 0; } }, 1, null), /audio context/i);
