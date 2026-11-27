@@ -1,5 +1,5 @@
 import SignalsmithStretch from './vendor/SignalsmithStretch.mjs';
-import { normalizeSemitones, schedulePitch } from './pitch-control.js';
+import { normalizeSemitones, normalizeQualityPreset, schedulePitch } from './pitch-control.js';
 
 let context = null;
 let stream = null;
@@ -9,6 +9,7 @@ let generation = 0;
 let latestPitch = 0;
 let preserveFormants = true;
 let engineLatency = 0;
+let qualityPreset = 'default';
 
 async function stop() {
   generation += 1;
@@ -29,7 +30,7 @@ async function stop() {
   }
 }
 
-async function start(streamId) {
+async function start(streamId, requestedPreset = qualityPreset) {
   await stop();
   const token = generation;
   try {
@@ -42,6 +43,17 @@ async function start(streamId) {
       return;
     }
     stream = capturedStream;
+    const capturedAudioStream = capturedStream;
+    capturedStream.getAudioTracks().forEach(track => {
+      track.addEventListener('ended', () => {
+        if (stream !== capturedAudioStream) return;
+        stop().then(() => chrome.runtime.sendMessage({
+          target: 'background',
+          type: 'ENGINE_STOPPED',
+          message: 'Chrome detuvo la captura de audio.'
+        }));
+      }, { once: true });
+    });
     context = new AudioContext({ latencyHint: 'interactive' });
     await context.resume();
     if (token !== generation) return;
@@ -60,6 +72,8 @@ async function start(streamId) {
       return;
     }
     engine = createdEngine;
+    qualityPreset = normalizeQualityPreset(requestedPreset);
+    engine.configure({ preset: qualityPreset });
     source = context.createMediaStreamSource(stream);
     source.connect(engine);
     engine.connect(context.destination);
@@ -71,7 +85,7 @@ async function start(streamId) {
     chrome.runtime.sendMessage({
       target: 'background',
       type: 'ENGINE_READY',
-      message: `Signalsmith listo · ${Math.round(latencySeconds * 1000)} ms de latencia`
+      message: `Signalsmith listo · ${Math.round(latencySeconds * 1000)} ms · ${qualityPreset === 'cheaper' ? 'ahorro de CPU' : 'calidad estándar'}`
     });
   } catch (error) {
     const cancelled = token !== generation;
@@ -104,7 +118,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ ready: true });
     return;
   }
-  if (message.type === 'START_CAPTURE') start(message.streamId);
+  if (message.type === 'START_CAPTURE') start(message.streamId, message.qualityPreset);
   if (message.type === 'SET_PITCH') updatePitch(message.semitones, message.preserveFormants);
   if (message.type === 'STOP_CAPTURE') stop();
 });
