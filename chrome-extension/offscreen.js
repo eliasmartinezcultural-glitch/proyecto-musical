@@ -7,7 +7,7 @@ let source = null;
 let engine = null;
 let generation = 0;
 let latestPitch = 0;
-let preserveFormants = true;
+let preserveFormants = false;
 let engineLatency = 0;
 let qualityPreset = 'default';
 
