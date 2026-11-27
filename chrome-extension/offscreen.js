@@ -85,8 +85,12 @@ function updatePitch(value, keepFormants) {
   });
 }
 
-chrome.runtime.onMessage.addListener(message => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.target !== 'offscreen') return;
+  if (message.type === 'PING') {
+    sendResponse({ ready: true });
+    return;
+  }
   if (message.type === 'START_CAPTURE') start(message.streamId);
   if (message.type === 'SET_PITCH') updatePitch(message.semitones, message.preserveFormants);
   if (message.type === 'STOP_CAPTURE') stop();
