@@ -38,6 +38,10 @@ async function start(streamId, requestedPreset = qualityPreset) {
       audio: { mandatory: { chromeMediaSource: 'tab', chromeMediaSourceId: streamId } },
       video: false
     });
+    if (!capturedStream.getAudioTracks().length) {
+      capturedStream.getTracks().forEach(track => track.stop());
+      throw new Error('Chrome no entregó una pista de audio para procesar.');
+    }
     if (token !== generation) {
       capturedStream.getTracks().forEach(track => track.stop());
       return;
@@ -56,6 +60,7 @@ async function start(streamId, requestedPreset = qualityPreset) {
     });
     context = new AudioContext({ latencyHint: 'interactive' });
     await context.resume();
+    if (context.state !== 'running') throw new Error('El navegador no permitió iniciar el motor de audio.');
     if (token !== generation) return;
 
     SignalsmithStretch.moduleUrl = chrome.runtime.getURL('vendor/SignalsmithStretch.mjs');
