@@ -1,6 +1,7 @@
 let activeTabId = null;
 let creating = null;
 let qualityPreset = 'default';
+let qualitySave = Promise.resolve();
 
 async function ensureOffscreen() {
   const url = chrome.runtime.getURL('offscreen.html');
@@ -41,6 +42,7 @@ async function stopCapture(tabId, message = 'Transposición detenida.') {
 chrome.action.onClicked.addListener(async tab => {
   if (!tab?.id) return;
   try {
+    await qualitySave;
     const savedPreferences = await chrome.storage.local.get('qualityPreset');
     qualityPreset = savedPreferences.qualityPreset === 'cheaper' ? 'cheaper' : 'default';
     const captured = await chrome.tabCapture.getCapturedTabs();
@@ -81,7 +83,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'SALA_QUALITY') {
     qualityPreset = message.qualityPreset === 'cheaper' ? 'cheaper' : 'default';
-    chrome.storage.local.set({ qualityPreset }).catch(() => {});
+    qualitySave = chrome.storage.local.set({ qualityPreset }).catch(() => {});
     sendResponse({ ok: true, qualityPreset, appliesOnNextStart: true });
     return;
   }
