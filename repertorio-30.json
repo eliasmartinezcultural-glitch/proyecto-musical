@@ -542,6 +542,25 @@
       "guitar": "Pendiente de transcripción.",
       "structure": "Pendiente de mapear.",
       "notes": "No asignar acordes ni tonalidad hasta contrastar la grabación."
+    },
+    {
+      "id": 31,
+      "artist": "Omega",
+      "title": "Bum, bum, bum",
+      "album": "Lo Que Suena",
+      "year": 2015,
+      "duration": "3:20",
+      "key": null,
+      "bpm": null,
+      "chords": [],
+      "status": "Canción incorporada · pista de ensayo pendiente",
+      "source": "https://temazo.es/omega/bum-bum-bum",
+      "confidence": "Identidad y álbum confirmados. No se encontró una pista karaoke/instrumental verificable de esta grabación. No asignar tono, BPM ni acordes sin cotejo.",
+      "vocal": "Pendiente: probar la melodía sobre la grabación de referencia y definir un tono cómodo.",
+      "keyboard": "Pendiente de transcripción auditiva.",
+      "guitar": "Pendiente de transcripción auditiva.",
+      "structure": "Pendiente de mapear intro, estrofas, estribillo y cierre con la grabación.",
+      "notes": "Primera canción de prueba solicitada para la sala. El catálogo consultado de Karaokes Seba no la incluye; consultar disponibilidad especial. La ficha no contiene audio ni simula una pista."
     }
   ]
 }
